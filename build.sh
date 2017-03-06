@@ -18,29 +18,25 @@ git config user.email "abhinav.tushar.vs@gmail.com"
 # Download flusight master
 wget "https://github.com/reichlab/flusight/archive/master.zip"
 unzip ./master.zip
+rm ./master.zip
 
 # Remove already present data
 cd ./flusight-master
 rm -rf ./data
-rm ./config.yaml ./.travis.yml ./deploy_private.enc ./.gitignore
-cd ..
-cp -r ./flusight-master/* ./
-rm -rf ./flusight-master
-git add .
-git commit -m "Merge flusight source"
-
-# Run deployment steps
-git checkout gh-pages || git checkout --orphan gh-pages
-rm -rf ./dist/* || exit 0
-
+rm ./config.yaml
+cp -r ../data ../config.yaml ./
 npm install
 npm run parse
 npm run test
 npm run build
-cp -r ./dist/* ./
-
+cp -r ./dist/* ../
+cd ..
+rm -rf ./flusight-master
 git add .
 git commit -m "Auto deploy to GitHub Pages: ${SHA}"
+
+# Run deployment steps
+git checkout gh-pages || git checkout --orphan gh-pages
 
 # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
 ENCRYPTED_KEY_VAR="encrypted_${ENCRYPTION_LABEL}_key"
