@@ -21,7 +21,7 @@ unzip ./master.zip
 
 # Remove already present data
 cd ./flusight-master
-rm rf ./data
+rm -rf ./data
 rm ./config.yaml ./.travis.yml ./deploy_private.enc ./.gitignore
 cd ..
 cp -r ./flusight-master/* ./
