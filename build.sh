@@ -21,6 +21,7 @@ unzip ./master.zip
 
 # Remove already present data
 rm -rf ./flusight-master/data
+rm ./flusight-master/config.yaml
 cp -r ./flusight-master/* ./
 git add .
 git commit -m "Merge flusight source"
