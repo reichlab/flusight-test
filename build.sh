@@ -20,9 +20,12 @@ wget "https://github.com/reichlab/flusight/archive/master.zip"
 unzip ./master.zip
 
 # Remove already present data
-rm -rf ./flusight-master/data
-rm ./flusight-master/config.yaml
+cd ./flusight-master
+rm rf ./data
+rm ./config.yaml ./.travis.yml ./deploy_private.enc ./.gitignore
+cd ..
 cp -r ./flusight-master/* ./
+rm -rf ./flusight-master
 git add .
 git commit -m "Merge flusight source"
 
@@ -30,9 +33,10 @@ git commit -m "Merge flusight source"
 git checkout gh-pages || git checkout --orphan gh-pages
 rm -rf ./dist/* || exit 0
 
-yarn run parse
-yarn run test
-yarn run build
+npm install
+npm run parse
+npm run test
+npm run build
 cp -r ./dist/* ./
 
 git add .
