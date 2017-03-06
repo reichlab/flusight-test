@@ -1,3 +1,12 @@
-before_install:
-- openssl aes-256-cbc -K $encrypted_291b44a5c7be_key -iv $encrypted_291b44a5c7be_iv
-  -in deploy_key.enc -out deploy_key -d
+language: node_js
+
+node_js:
+  - stable
+
+cache: yarn
+
+env:
+  global:
+  - ENCRYPTION_LABEL: "291b44a5c7be"
+
+script: bash ./build.sh
