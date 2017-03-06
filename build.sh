@@ -12,8 +12,8 @@ REPO=`git config remote.origin.url`
 SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
 SHA=`git rev-parse --verify HEAD`
 
-git config user.name "CI auto deploy"
-git config user.email "abhinav.tushar.vs@gmail.com"
+# Run deployment steps
+git checkout gh-pages || git checkout --orphan gh-pages
 
 # Download flusight master
 wget "https://github.com/reichlab/flusight/archive/master.zip"
@@ -32,11 +32,12 @@ npm run build
 cp -r ./dist/* ../
 cd ..
 rm -rf ./flusight-master
+
+git config user.name "CI auto deploy"
+git config user.email "abhinav.tushar.vs@gmail.com"
+
 git add .
 git commit -m "Auto deploy to GitHub Pages: ${SHA}"
-
-# Run deployment steps
-git checkout gh-pages || git checkout --orphan gh-pages
 
 # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
 ENCRYPTED_KEY_VAR="encrypted_${ENCRYPTION_LABEL}_key"
