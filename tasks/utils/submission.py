@@ -40,12 +40,12 @@ MAP_REGION = {
 }
 
 
-def build_sub_df(X: np.ndarray, point_prediction, region: str, target: str) -> Dict:
+def build_sub_df(bins: np.ndarray, point_prediction, region: str, target: str) -> Dict:
     """
     Create a segment of rows going into submission
     """
 
-    df: Dict[str, List[str]] = {key: [] for key in SUB_HEADER}
+    df = {key: [] for key in SUB_HEADER}
 
     def _append_row(row):
         df[SUB_HEADER[0]].append(MAP_REGION[row[0]])
@@ -56,34 +56,35 @@ def build_sub_df(X: np.ndarray, point_prediction, region: str, target: str) -> D
     if target in ["onset", "peak_week"]:
         # It should have 33 rows
         # TODO Fix the number of bins if the season has different number of weeks
-        if X.shape != (33,):
-            raise ValueError(f"X.shape needed (33,), got {X.shape}")
+        if bins.shape != (33,):
+            raise ValueError(f"bins.shape needed (33,), got {bins.shape}")
 
         # Not outputting point predictions since that is autocalculated by
         # flusight
-        # TODO Fix if needed
+        # TODO
         _append_row([region, target, "Point", "week", None, None, point_prediction])
 
         bin_starts = list(range(40, 53)) + list(range(1, 21))
         bin_ends: List[float] = [i + 1 for i in bin_starts]
 
-        for idx, x in enumerate(X):
+        for idx, x in enumerate(bins):
             _append_row([
                 region, target, "Bin", "week",
                 str(bin_starts[idx]), str(bin_ends[idx]), x
             ])
 
         # Add none bin with 0 probability
+        # TODO
         if target == "onset":
             _append_row([region, target, "Bin", "week", "none", "none", 0.0])
 
     else:
         # Assume percentage bin of size 131
-        if X.shape != (131,):
-            raise ValueError(f"X.shape needed (131,), got {X.shape}")
+        if bins.shape != (131,):
+            raise ValueError(f"bins.shape needed (131,), got {bins.shape}")
 
         # Point prediction
-        # TODO Fix if needed
+        # TODO
         _append_row([region, target, "Point", "percent", None, None, point_prediction])
 
         bin_starts = np.linspace(0, 13, 131)
@@ -91,7 +92,7 @@ def build_sub_df(X: np.ndarray, point_prediction, region: str, target: str) -> D
         # Set last bin_end to 100 to conform with submission format
         bin_ends[-1] = 100
 
-        for idx, x in enumerate(X):
+        for idx, x in enumerate(bins):
             _append_row([
                 region, target, "Bin", "percent",
                 f"{bin_starts[idx]:.1f}", f"{bin_ends[idx]:.1f}", x
@@ -122,18 +123,21 @@ class Submission:
 
         self.df.to_csv(file_name, na_rep="NA", index=False)
 
-    def get_X(self, region: str, target: str) -> np.ndarray:
+    def get_subset(self, region: str, target: str):
         """
-        Return X for asked region and target
+        Return bins and point value for asked region and target
         """
 
-        values = self.df[
+        subset = self.df[
             (self.df["Location"] == MAP_REGION[region]) & \
             (self.df["Target"] == MAP_TARGET[target])
-        ]["Value"].as_matrix()[1:] # Skip point predictions
+        ]
+
+        bins = subset[["Bin_start_incl", "Bin_end_notincl", "Value"]].iloc[1:, :]
+        point = subset["Value"].iloc[0]
 
         if target == "onset":
             # Don't return none bin
-            return values[:-1]
-        else:
-            return values
+            bins = bins.iloc[:-1, :]
+
+        return point, bins

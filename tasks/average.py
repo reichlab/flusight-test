@@ -14,13 +14,21 @@ def generate_output(kcde: sub.Submission,
     sections = []
     for target in TARGETS:
         for region in REGIONS:
-            kcde_X = kcde.get_X(region, target)
-            kde_X = kde.get_X(region, target)
-            sarima_X = sarima.get_X(region, target)
+            kcde_point, kcde_bins = kcde.get_subset(region, target)
+            kde_point, kde_bins = kde.get_subset(region, target)
+            sarima_point, sarima_bins = sarima.get_subset(region, target)
 
-            out_X = np.mean([kcde_X, kde_X, sarima_X], axis=0)
-            # TODO: Create point prediction
-            sections.append(sub.build_sub_df(out_X, 0, region, target))
+            # TODO Check for probability summation
+            out_bin_X = np.mean(
+                [
+                    kcde_bins.iloc[:, -1], kde_bins.iloc[:, -1],
+                    sarima_bins.iloc[:, -1]
+                ],
+                axis=0)
+
+            # TODO Create custom point prediction
+            sections.append(
+                sub.build_sub_df(out_bin_X, kcde_point, region, target))
 
     return sub.Submission(pd.concat(sections))
 
