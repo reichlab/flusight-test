@@ -29,9 +29,11 @@ def generate_output(kcde: sub.Submission,
             if target == "onset":
                 out_bin_X = out_bin_X / out_bin_X.sum()
 
-            # TODO Create custom point prediction
+            point_index = np.argmax(out_bin_X)
+            point = kcde_bins.iloc[point_index, 0]
+
             sections.append(
-                sub.build_sub_df(out_bin_X, kcde_point, region, target))
+                sub.build_sub_df(out_bin_X, point, region, target))
 
     return sub.Submission(pd.concat(sections))
 
