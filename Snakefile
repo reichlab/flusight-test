@@ -1,5 +1,9 @@
 from pathlib import Path
 from snakemake.remote.HTTP import RemoteProvider as HTTPRemoteProvider
+from zipfile import ZipFile
+import subprocess
+import shutil
+import os
 
 HTTP = HTTPRemoteProvider()
 
@@ -33,6 +37,25 @@ rule all:
 rule flusight:
     input:
         HTTP.remote("github.com/reichlab/flusight/archive/master.zip", keep_local=False, allow_redirects=True)
-    output: touch("flusight.done")
+    output: "flusight-local"
     message: "Setting up flusight"
-    run: ...
+    run:
+        try:
+            shutil.rmtree(output[0])
+        except:
+            pass
+
+        with ZipFile(input[0]) as zf:
+            zf.extractall()
+        os.rename("flusight-master", output[0])
+
+        shutil.rmtree(os.path.join(output[0], "data"))
+        os.remove(os.path.join(output[0], "config.yaml"))
+
+        os.symlink("../data", os.path.join(output[0], "data"), target_is_directory=True)
+        os.symlink("../config.yaml", os.path.join(output[0], "config.yaml"))
+
+        # Install deps
+        os.chdir(output[0])
+        subprocess.run(["yarn"])
+        os.chdir("..")
