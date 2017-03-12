@@ -13,13 +13,16 @@ SARIMA_files = "data/2016-2017/SARIMA/{week}.csv"
 
 # Outputs
 Average_files = "data/2016-2017/Average/{week}.csv"
+Average_meta = "data/2016-2017/Average/meta.yml"
 
 rule average:
     input:
         KCDE = expand(KCDE_files, week=weeks),
         KDE = expand(KDE_files, week=weeks),
         SARIMA = expand(SARIMA_files, week=weeks)
-    output: expand(Average_files, week=weeks)
+    output:
+        files = expand(Average_files, week=weeks),
+        meta = Average_meta
     message: "Running averaging model"
     script: "tasks/average.py"
 

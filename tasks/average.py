@@ -1,4 +1,5 @@
 from utils import submission as sub
+from utils import meta
 from tqdm import tqdm  # type: ignore
 import pandas as pd  # type: ignore
 import numpy as np  # type: ignore
@@ -18,6 +19,7 @@ def generate_output(kcde: sub.Submission,
             sarima_X = sarima.get_X(region, target)
 
             out_X = np.mean([kcde_X, kde_X, sarima_X], axis=0)
+            # TODO: Create point prediction
             sections.append(sub.build_sub_df(out_X, 0, region, target))
 
     return sub.Submission(pd.concat(sections))
@@ -29,4 +31,13 @@ for i in tqdm(range(len(snakemake.input.KCDE))):
     sarima_sub = sub.Submission(snakemake.input.SARIMA[i])
 
     out = generate_output(kcde_sub, kde_sub, sarima_sub)
-    out.to_csv(snakemake.output[i])
+    out.to_csv(snakemake.output.files[i])
+
+# Write metadata file
+metadata = {
+    "name": "Averaging model",
+    "description": "Average predictions from KCDE, KDE and SARIMA",
+    "url": "#"
+}
+
+meta.write_meta(metadata, snakemake.output.meta)
