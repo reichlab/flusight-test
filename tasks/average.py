@@ -18,13 +18,16 @@ def generate_output(kcde: sub.Submission,
             kde_point, kde_bins = kde.get_subset(region, target)
             sarima_point, sarima_bins = sarima.get_subset(region, target)
 
-            # TODO Check for probability summation
             out_bin_X = np.mean(
                 [
                     kcde_bins.iloc[:, -1], kde_bins.iloc[:, -1],
                     sarima_bins.iloc[:, -1]
                 ],
                 axis=0)
+
+            # Normalizing to handle case with none bins
+            if target == "onset":
+                out_bin_X = out_bin_X / out_bin_X.sum()
 
             # TODO Create custom point prediction
             sections.append(
