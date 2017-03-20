@@ -29,7 +29,12 @@ def generate_output(kcde: sub.Submission,
             if target == "onset":
                 out_bin_X = out_bin_X / out_bin_X.sum()
 
-            point_index = np.argmax(out_bin_X)
+            if target in ["one_week", "two_weeks", "three_weeks", "four_weeks", "peak"]:
+                # Skip the last bin (13-100%) which can be large
+                point_index = np.argmax(out_bin_X[:-1])
+            else:
+                point_index = np.argmax(out_bin_X)
+
             point = kcde_bins.iloc[point_index, 0]
 
             sections.append(

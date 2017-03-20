@@ -1022,7 +1022,7 @@ HHS Region 1,Season peak percentage,Bin,percent,12.7,12.8,0.000496551837594
 HHS Region 1,Season peak percentage,Bin,percent,12.8,12.9,0.000364942585464
 HHS Region 1,Season peak percentage,Bin,percent,12.9,13.0,0.000663649524562
 HHS Region 1,Season peak percentage,Bin,percent,13.0,100.0,0.00811451321028
-HHS Region 2,Season peak percentage,Point,percent,NA,NA,13
+HHS Region 2,Season peak percentage,Point,percent,NA,NA,4.3
 HHS Region 2,Season peak percentage,Bin,percent,0.0,0.1,3.29023130326e-05
 HHS Region 2,Season peak percentage,Bin,percent,0.1,0.2,3.29023130326e-05
 HHS Region 2,Season peak percentage,Bin,percent,0.2,0.3,3.29023130326e-05
@@ -1550,7 +1550,7 @@ HHS Region 5,Season peak percentage,Bin,percent,12.7,12.8,0.000428592110025
 HHS Region 5,Season peak percentage,Bin,percent,12.8,12.9,0.000493534695489
 HHS Region 5,Season peak percentage,Bin,percent,12.9,13.0,0.000527730069424
 HHS Region 5,Season peak percentage,Bin,percent,13.0,100.0,0.00646695620702
-HHS Region 6,Season peak percentage,Point,percent,NA,NA,13
+HHS Region 6,Season peak percentage,Point,percent,NA,NA,7.8
 HHS Region 6,Season peak percentage,Bin,percent,0.0,0.1,3.29023130326e-05
 HHS Region 6,Season peak percentage,Bin,percent,0.1,0.2,3.29023130326e-05
 HHS Region 6,Season peak percentage,Bin,percent,0.2,0.3,3.29023130326e-05
@@ -1682,7 +1682,7 @@ HHS Region 6,Season peak percentage,Bin,percent,12.7,12.8,0.00474296055013
 HHS Region 6,Season peak percentage,Bin,percent,12.8,12.9,0.00448060408647
 HHS Region 6,Season peak percentage,Bin,percent,12.9,13.0,0.00478146612707
 HHS Region 6,Season peak percentage,Bin,percent,13.0,100.0,0.203039811799
-HHS Region 7,Season peak percentage,Point,percent,NA,NA,13
+HHS Region 7,Season peak percentage,Point,percent,NA,NA,3
 HHS Region 7,Season peak percentage,Bin,percent,0.0,0.1,3.29023130326e-05
 HHS Region 7,Season peak percentage,Bin,percent,0.1,0.2,0.00101997170401
 HHS Region 7,Season peak percentage,Bin,percent,0.2,0.3,0.00960747540552
@@ -1946,7 +1946,7 @@ HHS Region 8,Season peak percentage,Bin,percent,12.7,12.8,0.00073160925213
 HHS Region 8,Season peak percentage,Bin,percent,12.8,12.9,0.000463218504261
 HHS Region 8,Season peak percentage,Bin,percent,12.9,13.0,0.000728592110025
 HHS Region 8,Season peak percentage,Bin,percent,13.0,100.0,0.0137525877669
-HHS Region 9,Season peak percentage,Point,percent,NA,NA,13
+HHS Region 9,Season peak percentage,Point,percent,NA,NA,5
 HHS Region 9,Season peak percentage,Bin,percent,0.0,0.1,3.29023130326e-05
 HHS Region 9,Season peak percentage,Bin,percent,0.1,0.2,3.29023130326e-05
 HHS Region 9,Season peak percentage,Bin,percent,0.2,0.3,3.29023130326e-05
