@@ -20,6 +20,19 @@ SARIMA_files = SEASON_ROOT + "/SARIMA/{week}.csv"
 # Outputs
 Average_files = SEASON_ROOT + "/Average/{week}.csv"
 Average_meta = SEASON_ROOT + "/Average/meta.yml"
+NN_files = SEASON_ROOT + "/NN/{week}.csv"
+NN_meta = SEASON_ROOT + "/NN/meta.yml"
+
+rule nn:
+    input:
+        KCDE = expand(KCDE_files, week=weeks),
+        KDE = expand(KDE_files, week=weeks),
+        SARIMA = expand(SARIMA_files, week=weeks)
+    output:
+        files = expand(NN_files, week=weeks),
+        meta = NN_meta
+    message: "Running neural network model"
+    script: "tasks/nn.py"
 
 rule average:
     input:
@@ -59,7 +72,6 @@ rule pull_data:
         shutil.copytree(downloaded_data_root + "/KCDE", output.KCDE)
         shutil.copytree(downloaded_data_root + "/KDE", output.KDE)
         shutil.copytree(downloaded_data_root + "/SARIMA", output.SARIMA)
-
 
 rule flusight:
     input:
