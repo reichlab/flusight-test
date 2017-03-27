@@ -7,17 +7,19 @@ import os
 
 HTTP = HTTPRemoteProvider()
 
+SEASON_ROOT = "data/2016-2017"
+
 # Assuming KCDE files are complete
-weeks = [p.stem for p in Path("data/2016-2017/KCDE").glob("*.csv")]
+weeks = [p.stem for p in Path(SEASON_ROOT + "/KCDE").glob("*.csv")]
 
 # Inputs
-KCDE_files = "data/2016-2017/KCDE/{week}.csv"
-KDE_files = "data/2016-2017/KDE/{week}.csv"
-SARIMA_files = "data/2016-2017/SARIMA/{week}.csv"
+KCDE_files = SEASON_ROOT + "/KCDE/{week}.csv"
+KDE_files = SEASON_ROOT + "/KDE/{week}.csv"
+SARIMA_files = SEASON_ROOT + "/SARIMA/{week}.csv"
 
 # Outputs
-Average_files = "data/2016-2017/Average/{week}.csv"
-Average_meta = "data/2016-2017/Average/meta.yml"
+Average_files = SEASON_ROOT + "/Average/{week}.csv"
+Average_meta = SEASON_ROOT + "/Average/meta.yml"
 
 rule average:
     input:
@@ -33,6 +35,31 @@ rule average:
 rule all:
     input:
         rules.average.output
+
+rule pull_data:
+    input:
+        HTTP.remote("github.com/reichlab/flusight/archive/master.zip", keep_local=False, allow_redirects=True)
+    output:
+        KCDE = SEASON_ROOT + "/KCDE",
+        KDE = SEASON_ROOT + "/KDE",
+        SARIMA = SEASON_ROOT + "/SARIMA"
+    message: "Pulling in latest submission files from flusight"
+    run:
+        try:
+            shutil.rmtree(output.KCDE)
+            shutil.rmtree(output.KDE)
+            shutil.rmtree(output.SARIMA)
+        except:
+            pass
+
+        with ZipFile(input[0]) as zf:
+            zf.extractall()
+
+        downloaded_data_root = "flusight-master/" + SEASON_ROOT
+        shutil.copytree(downloaded_data_root + "/KCDE", output.KCDE)
+        shutil.copytree(downloaded_data_root + "/KDE", output.KDE)
+        shutil.copytree(downloaded_data_root + "/SARIMA", output.SARIMA)
+
 
 rule flusight:
     input:
