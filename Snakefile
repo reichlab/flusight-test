@@ -87,6 +87,7 @@ rule pull_data:
         shutil.copytree(downloaded_data_root + "/KCDE", output.KCDE)
         shutil.copytree(downloaded_data_root + "/KDE", output.KDE)
         shutil.copytree(downloaded_data_root + "/SARIMA", output.SARIMA)
+        shutil.rmtree("flusight-master")
 
 rule flusight:
     input:
