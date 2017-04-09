@@ -22,6 +22,8 @@ Average_files = SEASON_ROOT + "/Average/{week}.csv"
 Average_meta = SEASON_ROOT + "/Average/meta.yml"
 NN_files = SEASON_ROOT + "/NN/{week}.csv"
 NN_meta = SEASON_ROOT + "/NN/meta.yml"
+Product_files = SEASON_ROOT + "/Product/{week}.csv"
+Product_meta = SEASON_ROOT + "/Product/meta.yml"
 
 rule nn:
     input:
@@ -45,9 +47,22 @@ rule average:
     message: "Running averaging model"
     script: "tasks/average.py"
 
+rule product:
+    input:
+        KCDE = expand(KCDE_files, week=weeks),
+        KDE = expand(KDE_files, week=weeks),
+        SARIMA = expand(SARIMA_files, week=weeks)
+    output:
+        files = expand(Product_files, week=weeks),
+        meta = Product_meta
+    message: "Running product model"
+    script: "tasks/product.py"
+
 rule all:
     input:
-        rules.average.output
+        rules.average.output,
+        rules.nn.output,
+        rules.product.output
 
 rule pull_data:
     input:
