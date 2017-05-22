@@ -1,0 +1,10 @@
+language: node_js
+
+node_js:
+  - stable
+
+env:
+  global:
+  - ENCRYPTION_LABEL: "291b44a5c7be"
+
+script: bash ./build.sh
